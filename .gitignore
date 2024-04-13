@@ -2,6 +2,9 @@ kicad/picowalker-32-backups/
 build/
 Drivers/
 
+kicad/fp-info-cache
+kicad/_autosave*
+kicad/#auto_saved_files#
 .mxproject
 
 *.lck
