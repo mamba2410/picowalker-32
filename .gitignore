@@ -1,0 +1,7 @@
+kicad/picowalker-32-backups/
+build/
+Drivers/
+
+.mxproject
+
+*.lck
