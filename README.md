@@ -10,6 +10,13 @@ The *picowalker-32* is based on the STM32U535 chip, which has far more ram, flas
 processor. Most importantly, its available to purchase, even in small quantities.
 Due to the lack of options for screens and batteries, the *picowalker-32* is slightly larger than the original *Pokewalker*.
 
+The software in this repo is designed to be enough to run the [picowalker-core]() code to fully simulate a *Pokewalker*,
+however, theres no reason that other software can't be run on it!
+
+The name *picowalker-32* comes from the original *picowalker* concept, a [mintyPi](https://sudomod.com/mintypi-v3-5/) inspired
+pokewalker, based on the [Raspberry Pi Pico](https://www.raspberrypi.com/products/raspberry-pi-pico/), hence the *pico* in the name.
+The project later evolved into a custom-PCB solution using an STM32 controller for lower power draw. Hence the *-32* suffix.
+
 ## What's in this repo
 
 - Design files for the schematics and PCB layout, drawn in KiCAD 7.
@@ -38,7 +45,7 @@ Left to do:
 If you want to help develop this project, make sure to read the [development document](./development.md) for instructions 
 on how to recreate the project at home.
 
-I encourage you to come join the [Discord]()! This is where most of the discussion happens about the project.
+I encourage you to come join the [Discord](https://discord.gg/dVVnM6f5tP)! This is where most of the discussion happens about the project.
 There's also other stuff related to the *Pokewalker* including reverse enginnering and hacking it.
 
 Thanks to all the contributors who have helped out a lot, especially
