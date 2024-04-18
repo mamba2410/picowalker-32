@@ -5,7 +5,8 @@
     - Want clocks as low as possible to save power
 - Test screen code
 - Test accelerometer code
-- Add code for eeprom
+- Test eeprom code
+- Add M95512 eeprom code
 - Add code for flash rom
 - Add code for IR
 - Add code for serial debug
@@ -16,3 +17,4 @@
 ## Further code optimisations
 
 - Check accelerometer power modes, sample rate etc. Can definitely save power there <https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bma400-ds000.pdf>
+- 25LC512 has a deep power down, might not be worth though
