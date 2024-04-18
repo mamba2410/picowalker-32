@@ -77,18 +77,18 @@ static void accel_read_reg(uint8_t reg, size_t len, uint8_t buf[len]) {
     HAL_GPIO_WritePin(ACCEL_CSB_PORT, ACCEL_CSB_PIN, GPIO_PIN_RESET);
 
     // Send command
-    if( HAL_SPI_Transmit() != HAL_OK ) {
-        Error_Handler(&SPI_HANDLE, &reg, 1, HAL_SPI_TIMEOUT_DEFAULT_VALUE);
+    if( HAL_SPI_Transmit(&SPIHANDLE, &reg, 1, HAL_SPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK ) {
+        Error_Handler();
     }
 
     // Read dummy byte
-    if( HAL_SPI_Receive() != HAL_OK ) {
-        Error_Handler(&SPI_HANDLE, buf, 1, HAL_SPI_TIMEOUT_DEFAULT_VALUE);
+    if( HAL_SPI_Receive(&SPI_HANDLE, buf, 1, HAL_SPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK ) {
+        Error_Handler();
     }
 
     // Read actual data
-    if( HAL_SPI_Receive() != HAL_OK ) {
-        Error_Handler(&SPI_HANDLE, buf, len, HAL_SPI_TIMEOUT_DEFAULT_VALUE);
+    if( HAL_SPI_Receive(&SPI_HANDLE, buf, len, HAL_SPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK ) {
+        Error_Handler();
     }
 
     HAL_GPIO_WritePin(ACCEL_CSB_PORT, ACCEL_CSB_PIN, GPIO_PIN_SET);
@@ -106,13 +106,13 @@ static void accel_write_reg(uint8_t reg, size_t len, uint8_t buf[len]) {
     HAL_GPIO_WritePin(ACCEL_CSB_PORT, ACCEL_CSB_PIN, GPIO_PIN_RESET);
 
     // Send command
-    if( HAL_SPI_Transmit() != HAL_OK ) {
-        Error_Handler(&SPI_HANDLE, &reg, 1, HAL_SPI_TIMEOUT_DEFAULT_VALUE);
+    if( HAL_SPI_Transmit(&SPI_HANDLE, &reg, 1, HAL_SPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK ) {
+        Error_Handler();
     }
 
     // Send data
-    if( HAL_SPI_Transmit() != HAL_OK ) {
-        Error_Handler(&SPI_HANDLE, buf, len, HAL_SPI_TIMEOUT_DEFAULT_VALUE);
+    if( HAL_SPI_Transmit(&SPI_HANDLE, buf, len, HAL_SPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK ) {
+        Error_Handler();
     }
 
     HAL_GPIO_WritePin(ACCEL_CSB_PORT, ACCEL_CSB_PIN, GPIO_PIN_SET);
