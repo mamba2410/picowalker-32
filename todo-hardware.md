@@ -17,3 +17,10 @@
     - Finalise battery signals (bat sense, power good, bat lo, etc)
 - Do we need IR shutdown? there are just enough pins for it. Depends on power consumption
 - Layout PCB
+
+## Breadboard prototyping
+
+SMD components breadboard breakout
+
+- IR transceiver has 0.5mm wide pins, 1mm apart
+- M95512 has 0.380mm pins, 1.27mm apart, min horizontal separation 3.9mm, max 6.0mm, SO8N package
