@@ -21,26 +21,16 @@
 //
 // pw screen scaled up x4 is 192k, this leaves us with
 // 64k left for other stuff. Plenty of space
-#define SCREEN_BUFFER_LEN (192*1024)
-uint8_t SCREEN_BUFFER[SCREEN_BUFFER_LEN] = {0};
+#define AMOLED_BUFFER_LEN (192*1024)
+uint8_t AMOLED_BUFFER[AMOLED_BUFFER_LEN] = {0};
 
 // map pw colour indices to 565 colours, dark to light
-/*
 const uint16_t colour_map[4] = {
-    0xaad4, // white
-    0x7fce, // light grey
-    0x5dca, // dark grey
-    0x2ac4, // black
-};
-*/
-const uint16_t colour_map[4] = { // THIS ONE WORKS, picked from colour picker website
     0xe75b, // white
     0xbe16, // light grey
     0x7c0e, // dark grey
     0x5289, // black
 };
-//const uint16_t colour_map[4] = {0xf800, 0xffe0, 0x07e0, 0xf81f};
-//const uint16_t colour_map[4] = {0x3333, 0x5555, 0x9999, 0xdddd};
 
 extern OSPI_HandleTypeDef SCREEN_OSPI_HANDLE;
 
@@ -79,6 +69,12 @@ typedef struct amoled_s {
     size_t true_height;
 } amoled_t;
 
+typedef struct screen_area_s {
+    int x;
+    int y;
+    int width;
+    int height;
+} screen_area_t;
 
 static amoled_t amoled = {0};
 
@@ -93,7 +89,7 @@ static amoled_t amoled = {0};
  * @param len Length of the parameters to send
  * @param params Array of parameters to send
  */
-void screen_write_cmd(uint8_t cmd, size_t len, uint8_t params[len]) {
+void amoled_send_cmd(uint8_t cmd, size_t len, uint8_t params[len]) {
 
     // See https://github.com/STMicroelectronics/stm32u5xx_hal_driver/blob/f1946d68701260860cdb5eae9f7bc5c3ff7f1cd1/Src/stm32u5xx_hal_ospi.c#L58
     // see also AN5050 section 6.2
@@ -152,7 +148,7 @@ void screen_write_cmd(uint8_t cmd, size_t len, uint8_t params[len]) {
  * @param data The data to send
  * @param cmd The command to use when sending
  */
-void screen_send_pixels(size_t len, uint8_t data[len], uint8_t cmd) {
+void amoled_send_data(size_t len, uint8_t data[len], uint8_t cmd) {
     OSPI_HandleTypeDef *hospi = &SCREEN_OSPI_HANDLE;
     OSPI_RegularCmdTypeDef ospi_cmd = {
         .OperationType = HAL_OSPI_OPTYPE_COMMON_CFG, // always common in regular mode
@@ -215,7 +211,7 @@ void screen_send_pixels(size_t len, uint8_t data[len], uint8_t cmd) {
  * @param len Number of bytes to send
  *
  */
-void screen_write_buffer(int x_start, int y_start, int width, int height,
+void amoled_draw_buffer(int x_start, int y_start, int width, int height,
         size_t len, uint8_t buf[len]) {
 
     uint8_t params[4] = {0};
@@ -227,13 +223,13 @@ void screen_write_buffer(int x_start, int y_start, int width, int height,
     params[1] = x_start&0xff;
     params[2] = x_end>>8; // end
     params[3] = x_end&0xff;
-    screen_write_cmd(CMD_COL_SET, 4, params);
+    amoled_send_cmd(CMD_COL_SET, 4, params);
 
     params[0] = y_start>>8;
     params[1] = y_start&0xff;
     params[2] = y_end>>8; // end
     params[3] = y_end&0xff;
-    screen_write_cmd(CMD_PAGE_SET, 4, params);
+    amoled_send_cmd(CMD_PAGE_SET, 4, params);
 
     size_t n_bytes = width*height*2; // 2 bytes per pixel
     if(n_bytes > len) {
@@ -241,13 +237,13 @@ void screen_write_buffer(int x_start, int y_start, int width, int height,
     }
 
     // send it in batches if needed
-    screen_send_pixels(len, buf, CMD_WRITE_START);
+    amoled_send_data(len, buf, CMD_WRITE_START);
 
     // send it again with 0x3c, doesn't work without it
-    screen_send_pixels(len, buf, CMD_WRITE_CONTINUE);
+    amoled_send_data(len, buf, CMD_WRITE_CONTINUE);
 
     // send nop to say we are done
-    screen_write_cmd(CMD_NOP, 0, params);
+    amoled_send_cmd(CMD_NOP, 0, params);
 
     // Delay may not be necessary
     HAL_Delay(10);
@@ -270,10 +266,10 @@ void screen_write_buffer(int x_start, int y_start, int width, int height,
  * @param colour 565 colour value to write
  *
  */
-void screen_clear_area(int x_start, int y_start, int width, int height, uint32_t colour) {
+void amoled_draw_block(int x_start, int y_start, int width, int height, uint32_t colour) {
 
     size_t n_bytes = 2*width*height;
-    size_t max_bytes = n_bytes < SCREEN_BUFFER_LEN ? n_bytes : SCREEN_BUFFER_LEN;
+    size_t max_bytes = n_bytes < AMOLED_BUFFER_LEN ? n_bytes : AMOLED_BUFFER_LEN;
 
     for(size_t i = 0; i < max_bytes; i+=2) {
         SCREEN_BUFFER[i+0] = colour>>8;
@@ -282,11 +278,11 @@ void screen_clear_area(int x_start, int y_start, int width, int height, uint32_t
 
     size_t total_height = 0;
     while(n_bytes > 0) {
-        size_t bytes_to_send = n_bytes < SCREEN_BUFFER_LEN ? n_bytes : SCREEN_BUFFER_LEN;
+        size_t bytes_to_send = n_bytes < AMOLED_BUFFER_LEN ? n_bytes : AMOLED_BUFFER_LEN;
         size_t this_height = bytes_to_send / (2*width);
         bytes_to_send = this_height * (2*width); // make sure it aligns
 
-        screen_write_buffer(x_start, y_start+total_height, width, this_height, bytes_to_send, SCREEN_BUFFER);
+        amoled_draw_buffer(x_start, y_start+total_height, width, this_height, bytes_to_send, AMOLED_BUFFER);
         n_bytes -= bytes_to_send;
         total_height += this_height;
     }
@@ -320,10 +316,7 @@ void decode_img(pw_img_t *pw_img, size_t out_len, uint8_t out_buf[out_len]) {
             pixel_value  = ((bpu>>j) & 1) << 1;
             pixel_value |= ((bpl>>j) & 1);
 
-            // put pixel in buffer, rotated 90 degrees clockwise
-            //row = (i/2) % pw_img->width;
-            //col = pw_img->height - 8*(i/(2*pw_img->width)) - j;
-
+            // transform coords
             size_t x_normal = (i/2)%pw_img->width;
             size_t y_normal = 8*(i/(2*pw_img->width)) + j;
             col = pw_img->height - y_normal;
@@ -342,6 +335,23 @@ void decode_img(pw_img_t *pw_img, size_t out_len, uint8_t out_buf[out_len]) {
             }
         }
     }
+}
+
+/**
+ * Transforms an area from pokewalker coordinates to amoled coordinates
+ * performs rotation, scale and translation
+ * 
+ * @param pw_area The starting coordinates and width/height of the area, in pokewalker coordinates
+ * @param a Amoled struct containing data about the amoled, only use offset
+ * @return The starting coords and width/height in amoled coordinates
+ */
+screen_area_t transform_pw_to_amoled(screen_area_t pw_area, amoled_t a) {
+    screen_area_t amoled_area = {0};
+    amoled_area.x = (SCREEN_HEIGHT - pw_area.height - pw_area.width)*SCREEN_SCALE + a.offset_x;
+    amoled_area.y = (x)*SCREEN_SCALE + a.offset_y;
+    amoled_area.width = pw_area.height * SCREEN_SCALE;
+    amoled_area.height = pw_area.width * SCREEN_SCALE;
+    return amoled_area;
 }
 
 
@@ -366,43 +376,42 @@ void pw_screen_init() {
     HAL_Delay(50); // max 150ms in sleep-out
 
     params[0] = 0x00;
-    screen_write_cmd(CMD_SLEEP_OUT, 1, params);
+    amoled_send_cmd(CMD_SLEEP_OUT, 1, params);
 
     HAL_Delay(120);
 
     //params[0] = 0x01;
     //params[1] = 0x66;
-    //screen_write_cmd(CMD_WRITE_TE_LINE, 2, params);
+    //amoled_send_cmd(CMD_WRITE_TE_LINE, 2, params);
 
     //params[0] = 0x00;
-    //screen_write_cmd(CMD_TE_ON, 1, params);
+    //amoled_send_cmd(CMD_TE_ON, 1, params);
 
-    //params[0] = 0x77; // 24bpp
+    // TODO: Check if 0x55 works again
     params[0] = 0xd5; // 16 bpp
     //params[0] = 0x55; // 565 encoded 16bpp
-    screen_write_cmd(CMD_PIXEL_FORMAT, 1, params);
+    amoled_send_cmd(CMD_PIXEL_FORMAT, 1, params);
 
     params[0] = 0x20;
-    screen_write_cmd(CMD_WRITE_CTRL_DSP1, 1, params);
+    amoled_send_cmd(CMD_WRITE_CTRL_DSP1, 1, params);
 
     HAL_Delay(10);
 
     params[0] = 0x00;
-    screen_write_cmd(CMD_SET_BRIGHTNESS, 1, params);
+    amoled_send_cmd(CMD_SET_BRIGHTNESS, 1, params);
 
     HAL_Delay(10);
 
-    screen_write_cmd(CMD_DISPLAY_ON, 0, params);
+    amoled_send_cmd(CMD_DISPLAY_ON, 0, params);
 
     HAL_Delay(10);
 
     params[0] = 0xff; // max brightness
-    screen_write_cmd(CMD_SET_BRIGHTNESS, 1, params);
+    amoled_send_cmd(CMD_SET_BRIGHTNESS, 1, params);
     HAL_Delay(5);
 
     // Clear whole screen
-    screen_clear_area(0, 0, AMOLED_WIDTH, AMOLED_HEIGHT, 0x0000);
-    //screen_clear_area(0, 0, AMOLED_WIDTH, AMOLED_HEIGHT, 0xf800);
+    amoled_draw_block(0, 0, AMOLED_WIDTH, AMOLED_HEIGHT, 0x0000);
 
     // Find offset to center pw screen
     // note that pw is landscape, but amoled is portrait.
@@ -412,34 +421,47 @@ void pw_screen_init() {
     amoled.offset_x = x_off;
     amoled.offset_y = y_off;
 
-    screen_write_cmd(CMD_NOP, 0, params);
+    amoled_send_cmd(CMD_NOP, 0, params);
 
-    // mark active area as bloo
-    screen_clear_area(x_off, y_off, SCREEN_SCALE*SCREEN_HEIGHT, SCREEN_SCALE*SCREEN_WIDTH, colour_map[SCREEN_BLACK]);
-    //screen_clear_area(x_off, y_off, SCREEN_SCALE*SCREEN_HEIGHT, SCREEN_SCALE*SCREEN_WIDTH, 0x3333);
-    //screen_clear_area(x_off, y_off, SCREEN_SCALE*SCREEN_HEIGHT, SCREEN_SCALE*SCREEN_WIDTH, 0x07ff);
+    // set pokewalker draw area to pokewalker black
+    amoled_draw_block(x_off, y_off, SCREEN_SCALE*SCREEN_HEIGHT, SCREEN_SCALE*SCREEN_WIDTH, colour_map[SCREEN_BLACK]);
 
 }
 
 void pw_screen_draw_img(pw_img_t *img, screen_pos_t x, screen_pos_t y) {
-    decode_img(img, SCREEN_BUFFER_LEN, SCREEN_BUFFER);
 
-    // now decoded image is in `SCREEN_BUFFER`
-    // x and y needs some calculations since they're scaled, rotated and translated
-    // width/height is swapped because its rotated
-    screen_write_buffer(
-            ((SCREEN_HEIGHT-img->height-y)*SCREEN_SCALE)+amoled.offset_x, (x*SCREEN_SCALE)+amoled.offset_y,
-            img->height*SCREEN_SCALE, img->width*SCREEN_SCALE,
-            2*img->width*SCREEN_SCALE * img->height*SCREEN_SCALE,
-            SCREEN_BUFFER);
+    // Put decoded, transformed image in `AMOLED_BUFFER`
+    decode_img(img, AMOLED_BUFFER_LEN, AMOLED_BUFFER);
+
+    // Transform image area to amoled coordinates
+    screen_area_t amoled_area = transform_pw_to_amoled((screen_area_t){
+        .x = x,
+        .y = y,
+        .width = img->width,
+        .height = img->height,
+    }, amoled);
+    amoled_draw_buffer(
+            //((SCREEN_HEIGHT-img->height-y)*SCREEN_SCALE)+amoled.offset_x, (x*SCREEN_SCALE)+amoled.offset_y,
+            //img->height*SCREEN_SCALE, img->width*SCREEN_SCALE,
+            amoled_area.x, amoled_area.y,
+            amoled_area.width, amoled_area.height,
+            2*amoled_area.width*amoled_area.height,
+            AMOLED_BUFFER);
 }
 
 void pw_screen_clear_area(screen_pos_t x, screen_pos_t y,
                           screen_pos_t w, screen_pos_t h) {
     
-    screen_clear_area(
-        ((SCREEN_HEIGHT-h-y)*SCREEN_SCALE)+amoled.offset_x, (x*SCREEN_SCALE)+amoled.offset_y,
-        h*SCREEN_SCALE, w*SCREEN_SCALE,
+    screen_area_t amoled_area = transform_pw_to_amoled((screen_area_t){
+        .x = x,
+        .y = y,
+        .width = w,
+        .height = h,
+    }, amoled);
+
+    amoled_draw_block(
+        amoled_area.x, amoled_area.y,
+        amoled_area.width, amoled_area.height,
         colour_map[SCREEN_WHITE]
     );
 }
@@ -447,9 +469,15 @@ void pw_screen_clear_area(screen_pos_t x, screen_pos_t y,
 void pw_screen_draw_horiz_line(screen_pos_t x, screen_pos_t y,
                                screen_pos_t len, screen_colour_t c) {
 
-    screen_clear_area(
-        ((SCREEN_HEIGHT-1-y)*SCREEN_SCALE)+amoled.offset_x, (x*SCREEN_SCALE)+amoled.offset_y,
-        1*SCREEN_SCALE, len*SCREEN_SCALE,
+    screen_area_t amoled_area = transform_pw_to_amoled((screen_area_t){
+        .x = x,
+        .y = y,
+        .width = len,
+        .height = 1,
+    }, amoled);
+    amoled_draw_block(
+        amoled_area.x, amoled_area.y,
+        amoled_area.width, amoled_area.height,
         colour_map[c]);
 }
 
@@ -460,28 +488,47 @@ void pw_screen_draw_text_box(screen_pos_t x1, screen_pos_t y1,
     // assume y2 > y1 and x2 > x1
     size_t width = x2 - x1 + 1;
     size_t height = y2 - y1 + 1;
-    screen_clear_area(
-        ((SCREEN_HEIGHT-1-y1)*SCREEN_SCALE)+amoled.offset_x, (x1*SCREEN_SCALE)+amoled.offset_y,
-        1*SCREEN_SCALE, width*SCREEN_SCALE,
+
+    screen_area_t amoled_area = {0}, pw_area = {0};
+
+    // top bar
+    pw_area = {.x = x1, .y = y1, .width = width, .height = 1};
+    amoled_area = transform_pw_to_amoled(pw_area, amoled)
+    amoled_draw_block(
+        amoled_area.x, amoled_area.y,
+        amoled_area.width, amoled_area.height,
         colour_map[c]);
-    screen_clear_area(
-        ((SCREEN_HEIGHT-1-y2)*SCREEN_SCALE)+amoled.offset_x, (x1*SCREEN_SCALE)+amoled.offset_y,
-        1*SCREEN_SCALE, width*SCREEN_SCALE,
+
+    // bottom bar
+    pw_area = {.x = x1, .y = y2, .width = width, .height = 1};
+    amoled_area = transform_pw_to_amoled(pw_area, amoled)
+    amoled_draw_block(
+        amoled_area.x, amoled_area.y,
+        amoled_area.width, amoled_area.height,
         colour_map[c]);
-    screen_clear_area(
-        ((SCREEN_HEIGHT-1-y1)*SCREEN_SCALE)+amoled.offset_x, (x1*SCREEN_SCALE)+amoled.offset_y,
-        height*SCREEN_SCALE, 1*SCREEN_SCALE,
+
+    // left bar
+    pw_area = {.x = x1, .y = y1, .width = 1, .height = height};
+    amoled_area = transform_pw_to_amoled(pw_area, amoled)
+    amoled_draw_block(
+        amoled_area.x, amoled_area.y,
+        amoled_area.width, amoled_area.height,
         colour_map[c]);
-    screen_clear_area(
-        ((SCREEN_HEIGHT-1-y1)*SCREEN_SCALE)+amoled.offset_x, (x2*SCREEN_SCALE)+amoled.offset_y,
-        height*SCREEN_SCALE, 1*SCREEN_SCALE,
+
+    // right bar
+    pw_area = {.x = x2, .y = y1, .width = 1, .height = height};
+    amoled_area = transform_pw_to_amoled(pw_area, amoled)
+    amoled_draw_block(
+        amoled_area.x, amoled_area.y,
+        amoled_area.width, amoled_area.height,
         colour_map[c]);
 }
 
 void pw_screen_clear() {
-    screen_clear_area(
-        amoled.offset_x, amoled.offset_y,
-        SCREEN_HEIGHT*SCREEN_SCALE, SCREEN_WIDTH*SCREEN_SCALE,
+    screen_area_t amoled_area = transform_pw_to_amoled((screen_area_t){.x=0, .y=0, .width=SCREEN_WIDTH, .height=SCREEN_HEIGHT}, amoled);
+    amoled_draw_block(
+        amoled_area.x, amoled_area.y,
+        amoled_area.width, amoled_area.height,
         colour_map[SCREEN_WHITE]
     );
 
@@ -490,9 +537,10 @@ void pw_screen_clear() {
 void pw_screen_fill_area(screen_pos_t x, screen_pos_t y,
                          screen_pos_t w, screen_pos_t h, screen_colour_t c) {
 
-    screen_clear_area(
-        ((SCREEN_HEIGHT-h-y)*SCREEN_SCALE)+amoled.offset_x, (x*SCREEN_SCALE)+amoled.offset_y,
-        h*SCREEN_SCALE, w*SCREEN_SCALE,
+    screen_area_t amoled_area = transform_pw_to_amoled((screen_area_t){.x=x, .y=y, .width=w, .height=h}, amoled);
+    amoled_draw_block(
+        amoled_area.x, amoled_area.y,
+        amoled_area.width, amoled_area.height,
         colour_map[c]
     );
 }
