@@ -436,26 +436,64 @@ void pw_screen_draw_img(pw_img_t *img, screen_pos_t x, screen_pos_t y) {
 
 void pw_screen_clear_area(screen_pos_t x, screen_pos_t y,
                           screen_pos_t w, screen_pos_t h) {
-
+    
+    screen_clear_area(
+        ((SCREEN_HEIGHT-h-y)*SCREEN_SCALE)+amoled.offset_x, (x*SCREEN_SCALE)+amoled.offset_y,
+        h*SCREEN_SCALE, w*SCREEN_SCALE,
+        colour_map[SCREEN_WHITE]
+    );
 }
 
 void pw_screen_draw_horiz_line(screen_pos_t x, screen_pos_t y,
                                screen_pos_t len, screen_colour_t c) {
 
+    screen_clear_area(
+        ((SCREEN_HEIGHT-1-y)*SCREEN_SCALE)+amoled.offset_x, (x*SCREEN_SCALE)+amoled.offset_y,
+        1*SCREEN_SCALE, len*SCREEN_SCALE,
+        colour_map[c]);
 }
 
 void pw_screen_draw_text_box(screen_pos_t x1, screen_pos_t y1,
                              screen_pos_t x2, screen_pos_t y2,
                              screen_colour_t c) {
 
+    // assume y2 > y1 and x2 > x1
+    size_t width = x2 - x1 + 1;
+    size_t height = y2 - y1 + 1;
+    screen_clear_area(
+        ((SCREEN_HEIGHT-1-y1)*SCREEN_SCALE)+amoled.offset_x, (x1*SCREEN_SCALE)+amoled.offset_y,
+        1*SCREEN_SCALE, width*SCREEN_SCALE,
+        colour_map[c]);
+    screen_clear_area(
+        ((SCREEN_HEIGHT-1-y2)*SCREEN_SCALE)+amoled.offset_x, (x1*SCREEN_SCALE)+amoled.offset_y,
+        1*SCREEN_SCALE, width*SCREEN_SCALE,
+        colour_map[c]);
+    screen_clear_area(
+        ((SCREEN_HEIGHT-1-y1)*SCREEN_SCALE)+amoled.offset_x, (x1*SCREEN_SCALE)+amoled.offset_y,
+        height*SCREEN_SCALE, 1*SCREEN_SCALE,
+        colour_map[c]);
+    screen_clear_area(
+        ((SCREEN_HEIGHT-1-y1)*SCREEN_SCALE)+amoled.offset_x, (x2*SCREEN_SCALE)+amoled.offset_y,
+        height*SCREEN_SCALE, 1*SCREEN_SCALE,
+        colour_map[c]);
 }
 
 void pw_screen_clear() {
+    screen_clear_area(
+        amoled.offset_x, amoled.offset_y,
+        SCREEN_HEIGHT*SCREEN_SCALE, SCREEN_WIDTH*SCREEN_SCALE,
+        colour_map[SCREEN_WHITE]
+    );
 
 }
 
 void pw_screen_fill_area(screen_pos_t x, screen_pos_t y,
                          screen_pos_t w, screen_pos_t h, screen_colour_t c) {
 
+    screen_clear_area(
+        ((SCREEN_HEIGHT-h-y)*SCREEN_SCALE)+amoled.offset_x, (x*SCREEN_SCALE)+amoled.offset_y,
+        h*SCREEN_SCALE, w*SCREEN_SCALE,
+        colour_map[c]
+    );
 }
 
