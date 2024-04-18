@@ -155,4 +155,20 @@ void pw_ir_init();
 int pw_ir_read(uint8_t *buf, size_t len);
 int pw_ir_write(uint8_t *buf, size_t len);
 
+/*
+ *  ==================================================================================
+ *  ACCELEROMETER
+ *  ==================================================================================
+ */
+
+/*
+ * Types and defines
+ */
+
+/*
+ * Functions defined by driver
+ */
+void pw_accel_init();
+uint32_t pw_accel_get_new_steps();
+
 #endif /* PW_PICOWALKER_INCLUDE_H */
