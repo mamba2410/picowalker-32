@@ -8,6 +8,7 @@
 - Test eeprom code
 - Add M95512 eeprom code
 - Add code for flash rom
+    - Just a note: both flash memories return data latched on falling edge, but accept data on rising edge
 - Add code for IR
 - Add code for serial debug
 - Add code for buttons
