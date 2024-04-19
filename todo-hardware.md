@@ -30,11 +30,15 @@
     - Do we need external crystal? If so, do we use `OSC32` (PC14,15) or `OSC` (PH0,1)
     - Verify there are no restrictions on interrupt input pins
     - Finalise battery signals (bat sense, power good, bat lo, etc)
+    - IR shutdown needs signal, idle power draw is 110uA
+- Choose chip packages
+    - SOIC8 (2.16mm high) and VSOP8 (1.00mm high) 5.38 x 8.10mm, pins 0.42mm wide, 1.27mm pitch (IS25xP128, W25Q128)
+    - SO8N (1.75mm high) 6.20 x 5.00mm, pins 0.48 wide, 1.27mm pitch (m95512)
+    - TSSOP8 (1.20mm high) 6.6 x 3.1mm, pins 0.30mm wide, 0.650 pitch (m95512)
 - Finalise IR transceiver
     - TFDU4101 is larger
     - TFDU4301 is smaller, slightly cheaper in quantity on mouser uk
     - TFBS4711 is smaller again, even cheaper on mouser uk, same electrical specs
-- IR shutdown needs signal, idle power draw is 110uA
 - Layout PCB
 
 ## Breadboard prototyping
