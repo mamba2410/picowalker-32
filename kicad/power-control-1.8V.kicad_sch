@@ -1428,7 +1428,7 @@
     (effects (font (size 1.27 1.27)) (justify left top))
     (uuid 48eef2cf-bdb1-420f-a072-4f201dc45440)
   )
-  (text_box "Probably need 3.3V LDO"
+  (text_box "Probably need 3.3V SMPS (LDO will drop out too high a voltage)"
     (at 198.12 71.12 0) (size 85.09 45.72)
     (stroke (width 0) (type default))
     (fill (type none))
