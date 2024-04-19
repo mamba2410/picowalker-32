@@ -14,8 +14,15 @@
 - Add code for buttons
 - Add code for speakers
 - Figure out how to get device to act as usb slave
+- Sleep mode
 
-## Further code optimisations
+## Sleep mode
 
-- Check accelerometer power modes, sample rate etc. Can definitely save power there <https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bma400-ds000.pdf>
-- 25LC512 has a deep power down, might not be worth though
+- Screen sleep - Sleep in mode after 30 sec, deep sleep after another 60 sec (arbitrary numbers)
+- controller sleep - sleep mode loop and stop 2/3 after 30 sec ? (check limitations of this mode eg. peripheral access) 
+- 25LC512 has a deep power down, but chip not used in final version
+- is25wp128 has a deep power down, enter when in screen deep sleep
+- bma400 auto switches between low (1.2uA) and normal power mode. Sleep mode probably useless since we always want to count steps
+- IR has a shutdown signal, set that when comms app is not running
+    - Idle current <110uA, standby current <1uA, transmitter draws 200-430mA in use
+- m95512 auto sleeps when CSB is high
