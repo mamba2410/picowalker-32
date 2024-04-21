@@ -1,13 +1,13 @@
 # TODO - Hardware
 
 - Finalise power circuitry
-    - Add battery model
-    - Check battery charging, choose charging chip and signals
-        - three signals from charge chip, all three form a 3-bit status code, nearly
-    - Decide on 1.8V vs 3.3V (leaning towards 1.8V)
-        - Seems like we need 3.3V for some things like IR. Can't just use Vbat in case charging circuit is active
-            - IR needs 2.4-5.5V operating
-            - Screen VCI and TP_VCC needs 2.7-3.5V
+    - Check battery charging
+        - Do we really want a non-standard batteyr size? it has better power density
+        but will end users be able to order replacements? do we send spares when they order?
+    - Check power rails (most 1.8V, some need 3.3V)
+            - IR needs 2.4-5.5V operating, can run on `PWR_SRC`
+            - Screen VCI and TP_VCC needs 2.7-3.5V, 
+            - MAJOR CONCERN: MCU needs 3.3V on VDDUSB which is bonded to VDD in 48-pin package
         - be careful when ordering m95512 M95512-D*W* is 2.5-5.5V, M95512-D*R* is 1.7-5.5V, *F* is 1.8-5.5V (MN is SO8, DW is WSSOP8)
             £0.552 version on mouser will do (M95512-DFMN)
             CHECK VERSION ON SCHEMATIC
