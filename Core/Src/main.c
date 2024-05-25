@@ -54,7 +54,7 @@ OSPI_HandleTypeDef hospi1;
 
 SPI_HandleTypeDef hspi2;
 
-IRDA_HandleTypeDef hirda4;
+UART_HandleTypeDef huart4;
 UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN PV */
@@ -73,7 +73,7 @@ static void MX_OCTOSPI1_Init(void);
 static void MX_SPI2_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_DAC1_Init(void);
-static void MX_UART4_IRDA_Init(void);
+static void MX_UART4_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -122,7 +122,7 @@ int main(void)
   MX_SPI2_Init();
   MX_USART1_UART_Init();
   MX_DAC1_Init();
-  MX_UART4_IRDA_Init();
+  MX_UART4_Init();
   /* USER CODE BEGIN 2 */
 
   picowalker_main();
@@ -549,7 +549,7 @@ static void MX_SPI2_Init(void)
   * @param None
   * @retval None
   */
-static void MX_UART4_IRDA_Init(void)
+static void MX_UART4_Init(void)
 {
 
   /* USER CODE BEGIN UART4_Init 0 */
@@ -559,15 +559,30 @@ static void MX_UART4_IRDA_Init(void)
   /* USER CODE BEGIN UART4_Init 1 */
 
   /* USER CODE END UART4_Init 1 */
-  hirda4.Instance = UART4;
-  hirda4.Init.BaudRate = 115200;
-  hirda4.Init.WordLength = IRDA_WORDLENGTH_8B;
-  hirda4.Init.Parity = IRDA_PARITY_NONE;
-  hirda4.Init.Mode = IRDA_MODE_TX_RX;
-  hirda4.Init.Prescaler = 1;
-  hirda4.Init.PowerMode = IRDA_POWERMODE_NORMAL;
-  hirda4.Init.ClockPrescaler = IRDA_PRESCALER_DIV1;
-  if (HAL_IRDA_Init(&hirda4) != HAL_OK)
+  huart4.Instance = UART4;
+  huart4.Init.BaudRate = 115200;
+  huart4.Init.WordLength = UART_WORDLENGTH_8B;
+  huart4.Init.StopBits = UART_STOPBITS_1;
+  huart4.Init.Parity = UART_PARITY_NONE;
+  huart4.Init.Mode = UART_MODE_TX_RX;
+  huart4.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart4.Init.OverSampling = UART_OVERSAMPLING_16;
+  huart4.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
+  huart4.Init.ClockPrescaler = UART_PRESCALER_DIV1;
+  huart4.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+  if (HAL_UART_Init(&huart4) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_UARTEx_SetTxFifoThreshold(&huart4, UART_TXFIFO_THRESHOLD_1_8) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_UARTEx_SetRxFifoThreshold(&huart4, UART_RXFIFO_THRESHOLD_1_8) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_UARTEx_DisableFifoMode(&huart4) != HAL_OK)
   {
     Error_Handler();
   }

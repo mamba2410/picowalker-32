@@ -542,16 +542,16 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef* hspi)
 }
 
 /**
-* @brief IRDA MSP Initialization
+* @brief UART MSP Initialization
 * This function configures the hardware resources used in this example
-* @param hirda: IRDA handle pointer
+* @param huart: UART handle pointer
 * @retval None
 */
-void HAL_IRDA_MspInit(IRDA_HandleTypeDef* hirda)
+void HAL_UART_MspInit(UART_HandleTypeDef* huart)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
   RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
-  if(hirda->Instance==UART4)
+  if(huart->Instance==UART4)
   {
   /* USER CODE BEGIN UART4_MspInit 0 */
 
@@ -585,20 +585,7 @@ void HAL_IRDA_MspInit(IRDA_HandleTypeDef* hirda)
 
   /* USER CODE END UART4_MspInit 1 */
   }
-
-}
-
-/**
-* @brief UART MSP Initialization
-* This function configures the hardware resources used in this example
-* @param huart: UART handle pointer
-* @retval None
-*/
-void HAL_UART_MspInit(UART_HandleTypeDef* huart)
-{
-  GPIO_InitTypeDef GPIO_InitStruct = {0};
-  RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
-  if(huart->Instance==USART1)
+  else if(huart->Instance==USART1)
   {
   /* USER CODE BEGIN USART1_MspInit 0 */
 
@@ -643,14 +630,14 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
 }
 
 /**
-* @brief IRDA MSP De-Initialization
+* @brief UART MSP De-Initialization
 * This function freeze the hardware resources used in this example
-* @param hirda: IRDA handle pointer
+* @param huart: UART handle pointer
 * @retval None
 */
-void HAL_IRDA_MspDeInit(IRDA_HandleTypeDef* hirda)
+void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
 {
-  if(hirda->Instance==UART4)
+  if(huart->Instance==UART4)
   {
   /* USER CODE BEGIN UART4_MspDeInit 0 */
 
@@ -668,18 +655,7 @@ void HAL_IRDA_MspDeInit(IRDA_HandleTypeDef* hirda)
 
   /* USER CODE END UART4_MspDeInit 1 */
   }
-
-}
-
-/**
-* @brief UART MSP De-Initialization
-* This function freeze the hardware resources used in this example
-* @param huart: UART handle pointer
-* @retval None
-*/
-void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
-{
-  if(huart->Instance==USART1)
+  else if(huart->Instance==USART1)
   {
   /* USER CODE BEGIN USART1_MspDeInit 0 */
 
