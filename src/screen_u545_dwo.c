@@ -349,7 +349,7 @@ void decode_img(pw_img_t *pw_img, size_t out_len, uint8_t out_buf[out_len]) {
  */
 screen_area_t transform_pw_to_amoled(screen_area_t pw_area, amoled_t a) {
     screen_area_t amoled_area = {0};
-    amoled_area.x = (SCREEN_HEIGHT - pw_area.height - pw_area.width)*SCREEN_SCALE + a.offset_x;
+    amoled_area.x = (SCREEN_HEIGHT - pw_area.height - pw_area.y)*SCREEN_SCALE + a.offset_x;
     amoled_area.y = (pw_area.x)*SCREEN_SCALE + a.offset_y;
     amoled_area.width = pw_area.height * SCREEN_SCALE;
     amoled_area.height = pw_area.width * SCREEN_SCALE;
