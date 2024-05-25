@@ -214,7 +214,7 @@ void amoled_send_data(size_t len, uint8_t data[len], uint8_t cmd) {
 void amoled_draw_buffer(int x_start, int y_start, int width, int height,
         size_t len, uint8_t buf[len]) {
 
-    uint8_t params[4] = {0};
+    uint8_t params[5] = {0};
     int x_end = x_start + width - 1;
     int y_end = y_start + height - 1;
 
@@ -272,19 +272,21 @@ void amoled_draw_block(int x_start, int y_start, int width, int height, uint32_t
     size_t max_bytes = n_bytes < AMOLED_BUFFER_LEN ? n_bytes : AMOLED_BUFFER_LEN;
 
     for(size_t i = 0; i < max_bytes; i+=2) {
-        SCREEN_BUFFER[i+0] = colour>>8;
-        SCREEN_BUFFER[i+1] = colour&0xff;
+        AMOLED_BUFFER[i+0] = colour>>8;
+        AMOLED_BUFFER[i+1] = colour&0xff;
     }
 
     size_t total_height = 0;
+    size_t buf_offset = 0;
     while(n_bytes > 0) {
         size_t bytes_to_send = n_bytes < AMOLED_BUFFER_LEN ? n_bytes : AMOLED_BUFFER_LEN;
         size_t this_height = bytes_to_send / (2*width);
         bytes_to_send = this_height * (2*width); // make sure it aligns
 
-        amoled_draw_buffer(x_start, y_start+total_height, width, this_height, bytes_to_send, AMOLED_BUFFER);
+        amoled_draw_buffer(x_start, y_start+total_height, width, this_height, bytes_to_send, AMOLED_BUFFER + buf_offset);
         n_bytes -= bytes_to_send;
         total_height += this_height;
+        //buf_offset += bytes_to_send;
     }
 }
 
@@ -340,7 +342,7 @@ void decode_img(pw_img_t *pw_img, size_t out_len, uint8_t out_buf[out_len]) {
 /**
  * Transforms an area from pokewalker coordinates to amoled coordinates
  * performs rotation, scale and translation
- * 
+ *
  * @param pw_area The starting coordinates and width/height of the area, in pokewalker coordinates
  * @param a Amoled struct containing data about the amoled, only use offset
  * @return The starting coords and width/height in amoled coordinates
@@ -348,7 +350,7 @@ void decode_img(pw_img_t *pw_img, size_t out_len, uint8_t out_buf[out_len]) {
 screen_area_t transform_pw_to_amoled(screen_area_t pw_area, amoled_t a) {
     screen_area_t amoled_area = {0};
     amoled_area.x = (SCREEN_HEIGHT - pw_area.height - pw_area.width)*SCREEN_SCALE + a.offset_x;
-    amoled_area.y = (x)*SCREEN_SCALE + a.offset_y;
+    amoled_area.y = (pw_area.x)*SCREEN_SCALE + a.offset_y;
     amoled_area.width = pw_area.height * SCREEN_SCALE;
     amoled_area.height = pw_area.width * SCREEN_SCALE;
     return amoled_area;
@@ -451,7 +453,7 @@ void pw_screen_draw_img(pw_img_t *img, screen_pos_t x, screen_pos_t y) {
 
 void pw_screen_clear_area(screen_pos_t x, screen_pos_t y,
                           screen_pos_t w, screen_pos_t h) {
-    
+
     screen_area_t amoled_area = transform_pw_to_amoled((screen_area_t){
         .x = x,
         .y = y,
@@ -492,32 +494,32 @@ void pw_screen_draw_text_box(screen_pos_t x1, screen_pos_t y1,
     screen_area_t amoled_area = {0}, pw_area = {0};
 
     // top bar
-    pw_area = {.x = x1, .y = y1, .width = width, .height = 1};
-    amoled_area = transform_pw_to_amoled(pw_area, amoled)
+    pw_area = (screen_area_t){.x = x1, .y = y1, .width = width, .height = 1};
+    amoled_area = transform_pw_to_amoled(pw_area, amoled);
     amoled_draw_block(
         amoled_area.x, amoled_area.y,
         amoled_area.width, amoled_area.height,
         colour_map[c]);
 
     // bottom bar
-    pw_area = {.x = x1, .y = y2, .width = width, .height = 1};
-    amoled_area = transform_pw_to_amoled(pw_area, amoled)
+    pw_area = (screen_area_t){.x = x1, .y = y2, .width = width, .height = 1};
+    amoled_area = transform_pw_to_amoled(pw_area, amoled);
     amoled_draw_block(
         amoled_area.x, amoled_area.y,
         amoled_area.width, amoled_area.height,
         colour_map[c]);
 
     // left bar
-    pw_area = {.x = x1, .y = y1, .width = 1, .height = height};
-    amoled_area = transform_pw_to_amoled(pw_area, amoled)
+    pw_area = (screen_area_t){.x = x1, .y = y1, .width = 1, .height = height};
+    amoled_area = transform_pw_to_amoled(pw_area, amoled);
     amoled_draw_block(
         amoled_area.x, amoled_area.y,
         amoled_area.width, amoled_area.height,
         colour_map[c]);
 
     // right bar
-    pw_area = {.x = x2, .y = y1, .width = 1, .height = height};
-    amoled_area = transform_pw_to_amoled(pw_area, amoled)
+    pw_area = (screen_area_t){.x = x2, .y = y1, .width = 1, .height = height};
+    amoled_area = transform_pw_to_amoled(pw_area, amoled);
     amoled_draw_block(
         amoled_area.x, amoled_area.y,
         amoled_area.width, amoled_area.height,
