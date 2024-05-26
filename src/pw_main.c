@@ -164,6 +164,7 @@ unsigned int dumps_furret_large_img_bin_len = 1536;
 void picowalker_main() {
 
     pw_screen_init();
+    pw_eeprom_init();
 
     pw_img_t img = {
         .width = 64,
@@ -174,11 +175,17 @@ void picowalker_main() {
     //screen_clear_area(0, 0, 200, 200, 0xf83f); // RGB=(1, 1, 1)
     //screen_clear_area(0, 0, 100, 100, 0xe03f);
 
+    uint8_t buf[16] = {0};
+
 
     int colour = 0x87e1; // works
     int boop = 0;
     while(1) {
         pw_log(2, "drawing frame %d\r\n", boop);
+
+        pw_eeprom_read(0x0000, buf, 9);
+        pw_log(4, "read from 0x0000: %x\r\n", buf[0]);
+
         pw_screen_draw_img(&img, 32, 0);
         img.data = dumps_furret_large_img_bin + boop*768;
         boop = (boop+1)%2;

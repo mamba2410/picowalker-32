@@ -7,6 +7,7 @@
 - Test screen code
 - Test accelerometer code
 - Test eeprom code
+    - Add a `delay_us` function because waiting 1ms between spi actions is wasteful
 - Add M95512 eeprom code
 - Add code for flash rom
     - Just a note: both flash memories return data latched on falling edge, but accept data on rising edge

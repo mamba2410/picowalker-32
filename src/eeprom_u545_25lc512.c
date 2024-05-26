@@ -33,7 +33,7 @@ static uint8_t EEPROM_WRITE_BUFFER[EEPROM_PAGE_SIZE] = {0};
 
 /**
  * Send a command to read a register
- * 
+ *
  * @param cmd Command to send to eeprom
  * @param len Number of bytes to read
  * @param buf Buffer to read into
@@ -41,22 +41,27 @@ static uint8_t EEPROM_WRITE_BUFFER[EEPROM_PAGE_SIZE] = {0};
 static void eeprom_read_reg(uint8_t cmd, size_t len, uint8_t buf[len]) {
     HAL_GPIO_WritePin(EEPROM_CSB_PORT, EEPROM_CSB_PIN, GPIO_PIN_RESET);
 
+    HAL_Delay(1);
+
     // Send command
-    if( HAL_SPI_Transmit(&SPI_HANDLE, &cmd, 1, HAL_SPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK ) {
+    if( HAL_SPI_Transmit(&SPI_HANDLE, &cmd, 1, 5000) != HAL_OK ) {
         Error_Handler();
     }
 
+    HAL_Delay(1);
     // Read data
-    if( HAL_SPI_Receive(&SPI_HANDLE, buf, len, HAL_SPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK ) {
+    if( HAL_SPI_Receive(&SPI_HANDLE, buf, len, 5000) != HAL_OK ) {
         Error_Handler();
     }
 
+    HAL_Delay(1);
     HAL_GPIO_WritePin(EEPROM_CSB_PORT, EEPROM_CSB_PIN, GPIO_PIN_SET);
+    HAL_Delay(1);
 }
 
 /**
  * Send a command and data to the eeprom
- * 
+ *
  * @param cmd Command to send to eeprom
  * @param len Number of bytes to send
  * @param buf Buffer of bytes to write to eeprom
@@ -64,19 +69,23 @@ static void eeprom_read_reg(uint8_t cmd, size_t len, uint8_t buf[len]) {
 static void eeprom_write_cmd(uint8_t cmd, size_t len, uint8_t buf[len]) {
     HAL_GPIO_WritePin(EEPROM_CSB_PORT, EEPROM_CSB_PIN, GPIO_PIN_RESET);
 
+    HAL_Delay(1);
     // Send command
-    if( HAL_SPI_Transmit(&SPI_HANDLE, &cmd, 1, HAL_SPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK ) {
+    if( HAL_SPI_Transmit(&SPI_HANDLE, &cmd, 1, 500) != HAL_OK ) {
         Error_Handler();
     }
 
+    HAL_Delay(1);
     // Send data
     if(len > 0 && buf != NULL) {
-        if( HAL_SPI_Transmit(&SPI_HANDLE, &buf, len, HAL_SPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK ) {
+        if( HAL_SPI_Transmit(&SPI_HANDLE, &buf, len, 500) != HAL_OK ) {
             Error_Handler();
         }
     }
 
+    HAL_Delay(1);
     HAL_GPIO_WritePin(EEPROM_CSB_PORT, EEPROM_CSB_PIN, GPIO_PIN_SET);
+    HAL_Delay(1);
 }
 
 /**
@@ -124,21 +133,25 @@ int pw_eeprom_read(eeprom_addr_t addr, uint8_t *buf, size_t len) {
     // Send command and address, then read bytes in
     params[0] = EEPROM_CMD_READ;
     params[1] = addr>>8;
-    params[2] = addr&0xff
+    params[2] = addr&0xff;
 
     HAL_GPIO_WritePin(EEPROM_CSB_PORT, EEPROM_CSB_PIN, GPIO_PIN_RESET);
 
+    HAL_Delay(1);
     // Send command and address
-    if( HAL_SPI_Transmit(&SPI_HANDLE, params, 3, HAL_SPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK ) {
+    if( HAL_SPI_Transmit(&SPI_HANDLE, params, 3, 500) != HAL_OK ) {
         Error_Handler();
     }
 
+    HAL_Delay(1);
     // Read data
-    if( HAL_SPI_Receive(&SPI_HANDLE, buf, len, HAL_SPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK ) {
+    if( HAL_SPI_Receive(&SPI_HANDLE, buf, len, 500) != HAL_OK ) {
         Error_Handler();
     }
 
+    HAL_Delay(1);
     HAL_GPIO_WritePin(EEPROM_CSB_PORT, EEPROM_CSB_PIN, GPIO_PIN_SET);
+    HAL_Delay(1);
 
     // HAL doesn't give us this data, so assume we read it all
     return (int)len;
@@ -157,7 +170,7 @@ int pw_eeprom_write(eeprom_addr_t addr, uint8_t *buf, size_t len) {
     while(n_written < len) {
         eeprom_wait_for_ready();
 
-        // Enable writes, this may not be necessary for every write instruction 
+        // Enable writes, this may not be necessary for every write instruction
         eeprom_write_cmd(EEPROM_CMD_WREN, 0, params);
 
         // Write a maximum of 1 page at a time
@@ -170,12 +183,12 @@ int pw_eeprom_write(eeprom_addr_t addr, uint8_t *buf, size_t len) {
         HAL_GPIO_WritePin(EEPROM_CSB_PORT, EEPROM_CSB_PIN, GPIO_PIN_RESET);
 
         // Send command and address
-        if( HAL_SPI_Transmit(&SPI_HANDLE, params, 3, HAL_SPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK ) {
+        if( HAL_SPI_Transmit(&SPI_HANDLE, params, 3, 500) != HAL_OK ) {
             Error_Handler();
         }
 
         // Send data
-        if( HAL_SPI_Transmit(&SPI_HANDLE, buf, this_write, HAL_SPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK ) {
+        if( HAL_SPI_Transmit(&SPI_HANDLE, buf, this_write, 500) != HAL_OK ) {
             Error_Handler();
         }
 
