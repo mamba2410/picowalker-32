@@ -21,12 +21,12 @@ List of hardware I'm currently using to prototype on a breadboard:
 
 ## Software
 
-All software development (except CubeMX stuff) has been done on linux, I don't know how to build and debug on 
+All software development (except CubeMX stuff) has been done on linux, I don't know how to build and debug on
 Windows, sorry.
 
 - [KiCad 7.0](https://www.kicad.org/) for the schematics and PCB layouts (haven't tested with 8.0).
 - [SamacSys Library Loader](https://www.samacsys.com/library-loader/) for KiCad models and schematics.
-- [STM32CubeMX](https://www.st.com/en/development-tools/stm32cubemx.html) for pinout and STM32 MCU initialisation and HAL.
+- [STM32CubeMX VERSION 6.10](https://www.st.com/en/development-tools/stm32cubemx.html) for pinout and STM32 MCU initialisation and HAL.
 - Neovim/VSCode for all other programming.
 - CMake/GNU make for building.
 - Linux/WSL for compiling and debugging the code.
