@@ -1,8 +1,9 @@
 # TODO - Software
 
 - Configure clocks for STM32.
-    - OSPI works when sys clock is 100MHz and OSPI prescaler is 20.
+    - OSPI works when sys clock is 128MHz and OSPI prescaler is 16.
     - Want clocks as low as possible to save power
+    - Screen drawing is slow when core speed is slow - use DMA
 - Test screen code
 - Test accelerometer code
 - Test eeprom code
@@ -19,7 +20,7 @@
 ## Sleep mode
 
 - Screen sleep - Sleep in mode after 30 sec, deep sleep after another 60 sec (arbitrary numbers)
-- controller sleep - sleep mode loop and stop 2/3 after 30 sec ? (check limitations of this mode eg. peripheral access) 
+- controller sleep - sleep mode loop and stop 2/3 after 30 sec ? (check limitations of this mode eg. peripheral access)
 - 25LC512 has a deep power down, but chip not used in final version
 - is25wp128 has a deep power down, enter when in screen deep sleep
 - bma400 auto switches between low (1.2uA) and normal power mode. Sleep mode probably useless since we always want to count steps
