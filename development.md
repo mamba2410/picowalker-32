@@ -32,6 +32,11 @@ Windows, sorry.
 - Linux/WSL for compiling and debugging the code.
 - [stlink](https://github.com/stlink-org/stlink) and gdb for on-chip debugging.
 
+## Notes on STM32 stuff
+
+- SPI mode check "Master keep IO state enable" otherwise it fiddles with the clock and misses the first
+  bit.
+
 ## Guide
 
 Guide is yet to come.

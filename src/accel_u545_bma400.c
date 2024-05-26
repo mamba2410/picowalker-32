@@ -65,10 +65,10 @@ static uint32_t total_steps = 0;
 
 /**
  * Read data from a register on the chip
- * 
+ *
  * The register is sent, then we receive a dummy byte and
  * the actual data follows.
- * 
+ *
  * @param len Number of bytes to read back
  * @param buf Buffer to receive data into
  */
@@ -76,18 +76,15 @@ static void accel_read_reg(uint8_t reg, size_t len, uint8_t buf[len]) {
     reg |= ACCEL_READ_BIT;
     HAL_GPIO_WritePin(ACCEL_CSB_PORT, ACCEL_CSB_PIN, GPIO_PIN_RESET);
 
-    // Send command
-    if( HAL_SPI_Transmit(&SPIHANDLE, &reg, 1, HAL_SPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK ) {
-        Error_Handler();
-    }
+    uint8_t txbuf[2] = {reg, 0};
 
-    // Read dummy byte
-    if( HAL_SPI_Receive(&SPI_HANDLE, buf, 1, HAL_SPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK ) {
+    // Send command and read dummy in one go
+    if( HAL_SPI_TransmitReceive(&SPI_HANDLE, txbuf, txbuf, 2, 500) != HAL_OK) {
         Error_Handler();
     }
 
     // Read actual data
-    if( HAL_SPI_Receive(&SPI_HANDLE, buf, len, HAL_SPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK ) {
+    if( HAL_SPI_Receive(&SPI_HANDLE, buf, len, 500) != HAL_OK ) {
         Error_Handler();
     }
 
@@ -96,7 +93,7 @@ static void accel_read_reg(uint8_t reg, size_t len, uint8_t buf[len]) {
 
 /**
  * Write buffer to register on chip.
- * 
+ *
  * @param reg The register to write to
  * @param len Number of bytes to send
  * @param buf Buffer to send
@@ -106,12 +103,12 @@ static void accel_write_reg(uint8_t reg, size_t len, uint8_t buf[len]) {
     HAL_GPIO_WritePin(ACCEL_CSB_PORT, ACCEL_CSB_PIN, GPIO_PIN_RESET);
 
     // Send command
-    if( HAL_SPI_Transmit(&SPI_HANDLE, &reg, 1, HAL_SPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK ) {
+    if( HAL_SPI_Transmit(&SPI_HANDLE, &reg, 1, 500) != HAL_OK ) {
         Error_Handler();
     }
 
     // Send data
-    if( HAL_SPI_Transmit(&SPI_HANDLE, buf, len, HAL_SPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK ) {
+    if( HAL_SPI_Transmit(&SPI_HANDLE, buf, len, 500) != HAL_OK ) {
         Error_Handler();
     }
 
@@ -121,7 +118,7 @@ static void accel_write_reg(uint8_t reg, size_t len, uint8_t buf[len]) {
 /**
  * Read steps as 24-bit LE int.
  * Check the power status first, if asleep, wake it up.
- * 
+ *
  * @param len Max length of the buffer
  * @param buf Buffer to use when sending messages
  * @return Number of steps reported by chip
@@ -133,7 +130,7 @@ static uint32_t accel_read_steps(size_t len, uint8_t buf[len]) {
     if(power_mode == ACCEL_POWER_SLEEP) {
         // power offset in config reg is different to status reg
         buf[0] = ACCEL_POWER_NORMAL;
-        accel_write_reg(ACCEL_REG_ACC_CONFIG0);
+        accel_write_reg(ACCEL_REG_ACC_CONFIG0, 1, buf);
         HAL_Delay(2);
     }
 
@@ -154,8 +151,9 @@ static uint32_t accel_read_steps(size_t len, uint8_t buf[len]) {
 void pw_accel_init() {
     // Ensure CS pin is high
     HAL_GPIO_WritePin(ACCEL_CSB_PORT, ACCEL_CSB_PIN, GPIO_PIN_SET);
+    HAL_Delay(1);
 
-    uint8_t buf[4];
+    uint8_t buf[4] = {0};
 
     // Check if chip is on bus
     accel_read_reg(ACCEL_REG_CHIPID, 1, buf);

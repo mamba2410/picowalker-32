@@ -163,8 +163,12 @@ unsigned int dumps_furret_large_img_bin_len = 1536;
 
 void picowalker_main() {
 
+    HAL_GPIO_WritePin(ACCEL_CSB_PORT, ACCEL_CSB_PIN, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(EEPROM_CSB_PORT, EEPROM_CSB_PIN, GPIO_PIN_SET);
+
     pw_screen_init();
     pw_eeprom_init();
+    pw_accel_init();
 
     pw_img_t img = {
         .width = 64,
@@ -177,14 +181,14 @@ void picowalker_main() {
 
     uint8_t buf[16] = {0};
 
-
     int colour = 0x87e1; // works
     int boop = 0;
     while(1) {
-        pw_log(2, "drawing frame %d\r\n", boop);
+        pw_eeprom_read(0x0000, buf, 8);
+        pw_log(4, "nintendo string: %s\r\n", buf);
 
-        pw_eeprom_read(0x0000, buf, 9);
-        pw_log(4, "read from 0x0000: %x\r\n", buf[0]);
+        uint32_t new_steps = pw_accel_get_new_steps();
+        pw_log(4, "got new steps %d\r\n", new_steps);
 
         pw_screen_draw_img(&img, 32, 0);
         img.data = dumps_furret_large_img_bin + boop*768;

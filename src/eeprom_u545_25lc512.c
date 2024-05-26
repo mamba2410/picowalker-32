@@ -41,22 +41,17 @@ static uint8_t EEPROM_WRITE_BUFFER[EEPROM_PAGE_SIZE] = {0};
 static void eeprom_read_reg(uint8_t cmd, size_t len, uint8_t buf[len]) {
     HAL_GPIO_WritePin(EEPROM_CSB_PORT, EEPROM_CSB_PIN, GPIO_PIN_RESET);
 
-    HAL_Delay(1);
-
     // Send command
     if( HAL_SPI_Transmit(&SPI_HANDLE, &cmd, 1, 5000) != HAL_OK ) {
         Error_Handler();
     }
 
-    HAL_Delay(1);
     // Read data
     if( HAL_SPI_Receive(&SPI_HANDLE, buf, len, 5000) != HAL_OK ) {
         Error_Handler();
     }
 
-    HAL_Delay(1);
     HAL_GPIO_WritePin(EEPROM_CSB_PORT, EEPROM_CSB_PIN, GPIO_PIN_SET);
-    HAL_Delay(1);
 }
 
 /**
@@ -69,13 +64,11 @@ static void eeprom_read_reg(uint8_t cmd, size_t len, uint8_t buf[len]) {
 static void eeprom_write_cmd(uint8_t cmd, size_t len, uint8_t buf[len]) {
     HAL_GPIO_WritePin(EEPROM_CSB_PORT, EEPROM_CSB_PIN, GPIO_PIN_RESET);
 
-    HAL_Delay(1);
     // Send command
     if( HAL_SPI_Transmit(&SPI_HANDLE, &cmd, 1, 500) != HAL_OK ) {
         Error_Handler();
     }
 
-    HAL_Delay(1);
     // Send data
     if(len > 0 && buf != NULL) {
         if( HAL_SPI_Transmit(&SPI_HANDLE, &buf, len, 500) != HAL_OK ) {
@@ -83,9 +76,7 @@ static void eeprom_write_cmd(uint8_t cmd, size_t len, uint8_t buf[len]) {
         }
     }
 
-    HAL_Delay(1);
     HAL_GPIO_WritePin(EEPROM_CSB_PORT, EEPROM_CSB_PIN, GPIO_PIN_SET);
-    HAL_Delay(1);
 }
 
 /**
@@ -137,21 +128,17 @@ int pw_eeprom_read(eeprom_addr_t addr, uint8_t *buf, size_t len) {
 
     HAL_GPIO_WritePin(EEPROM_CSB_PORT, EEPROM_CSB_PIN, GPIO_PIN_RESET);
 
-    HAL_Delay(1);
     // Send command and address
     if( HAL_SPI_Transmit(&SPI_HANDLE, params, 3, 500) != HAL_OK ) {
         Error_Handler();
     }
 
-    HAL_Delay(1);
     // Read data
     if( HAL_SPI_Receive(&SPI_HANDLE, buf, len, 500) != HAL_OK ) {
         Error_Handler();
     }
 
-    HAL_Delay(1);
     HAL_GPIO_WritePin(EEPROM_CSB_PORT, EEPROM_CSB_PIN, GPIO_PIN_SET);
-    HAL_Delay(1);
 
     // HAL doesn't give us this data, so assume we read it all
     return (int)len;
