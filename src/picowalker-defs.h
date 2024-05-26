@@ -171,4 +171,27 @@ int pw_ir_write(uint8_t *buf, size_t len);
 void pw_accel_init();
 uint32_t pw_accel_get_new_steps();
 
+/*
+ *  ==================================================================================
+ *  LOGGING
+ *  ==================================================================================
+ */
+
+/*
+ * Types and defines
+ */
+typedef enum {
+    PW_LOG_FATAL,
+    PW_LOG_ERROR,
+    PW_LOG_WARN,
+    PW_LOG_INFO,
+    PW_LOG_DEBUG,
+} pw_log_level_t;
+
+/*
+ * Functions defined by driver
+ */
+void pw_log_init();
+void pw_log(pw_log_level_t level, const char* format, ...);
+
 #endif /* PW_PICOWALKER_INCLUDE_H */

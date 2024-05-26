@@ -3,6 +3,11 @@
 
 extern void pw_screen_init();
 
+#include "peripherals.h"
+#include "stm32u5xx_hal.h"
+#include "stm32u5xx_hal_uart.h"
+extern UART_HandleTypeDef DEBUG_UART_HANDLE;
+
 // image of electrode, 32x24 pixels
 unsigned char dumps_electrode_small_img_bin[] = {
   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -169,9 +174,11 @@ void picowalker_main() {
     //screen_clear_area(0, 0, 200, 200, 0xf83f); // RGB=(1, 1, 1)
     //screen_clear_area(0, 0, 100, 100, 0xe03f);
 
+
     int colour = 0x87e1; // works
     int boop = 0;
     while(1) {
+        pw_log(2, "drawing frame %d\r\n", boop);
         pw_screen_draw_img(&img, 32, 0);
         img.data = dumps_furret_large_img_bin + boop*768;
         boop = (boop+1)%2;
