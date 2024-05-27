@@ -62,6 +62,7 @@ void Error_Handler(void);
 #define USER_BUTTON_EXTI_IRQn EXTI13_IRQn
 #define ACCEL_INT1_Pin GPIO_PIN_1
 #define ACCEL_INT1_GPIO_Port GPIOH
+#define ACCEL_INT1_EXTI_IRQn EXTI1_IRQn
 #define SCREEN_RST_Pin GPIO_PIN_0
 #define SCREEN_RST_GPIO_Port GPIOC
 #define IrDA_TX_Pin GPIO_PIN_0

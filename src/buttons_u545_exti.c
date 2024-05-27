@@ -24,6 +24,8 @@ void HAL_GPIO_EXTI_Falling_Callback(uint16_t pin) {
         if(pin == BUT3_PIN) b |= BUTTON_R;
         pw_button_callback(b);
 
+    } else if(pin == ACCEL_INT_PIN){
+        pw_log(3, "Accel int got %d steps\r\n", pw_accel_get_new_steps());
     } else {
         pw_log(2, "EXTI handled, not from buttons\r\n");
     }

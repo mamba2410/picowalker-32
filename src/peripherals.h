@@ -76,6 +76,8 @@
 #define BUT2_PORT       GPIOC
 #define BUT3_PIN        GPIO_PIN_10
 #define BUT3_PORT       GPIOC
+#define ACCEL_INT_PIN   GPIO_PIN_1
+#define ACCEL_INT_PORT  GPIOH
 
 /*
  * Handles from Core/Src/main.c
