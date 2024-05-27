@@ -1,7 +1,7 @@
 #include "main.h"
 #include "picowalker-defs.h"
 
-extern void pw_screen_init();
+uint8_t *sad_pokewalker;
 
 #include "peripherals.h"
 #include "stm32u5xx_hal.h"
@@ -161,11 +161,32 @@ unsigned char dumps_furret_large_img_bin[] = {
 };
 unsigned int dumps_furret_large_img_bin_len = 1536;
 
+/*
+ * ===================================
+ * STUBS PLEASE FILL IN
+ * ===================================
+ */
+void pw_ir_delay_ms(size_t delay) {
+    HAL_Delay(delay);
+}
+
+void pw_flash_read() {
+
+}
+
+extern TIM_HandleTypeDef htim1;
+uint32_t pw_now_us() {
+    return htim1.Instance->CNT;
+}
+
 void picowalker_main() {
 
     HAL_GPIO_WritePin(ACCEL_CSB_PORT, ACCEL_CSB_PIN, GPIO_PIN_SET);
     HAL_GPIO_WritePin(EEPROM_CSB_PORT, EEPROM_CSB_PIN, GPIO_PIN_SET);
 
+    walker_entry();
+
+    /*
     pw_log_init();
     pw_screen_init();
     pw_eeprom_init();
@@ -212,5 +233,6 @@ void picowalker_main() {
         HAL_Delay(500);
     }
 
+    */
 }
 

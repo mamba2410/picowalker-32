@@ -165,7 +165,7 @@ CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)"
 LDSCRIPT = STM32U545xx_FLASH.ld
 
 # libraries
-LIBS = -lc -lm -lnosys
+LIBS = -lc -lm -lnosys libpicowalker-core.a
 LIBDIR =
 LDFLAGS = $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
 
