@@ -484,12 +484,12 @@ void pw_screen_draw_horiz_line(screen_pos_t x, screen_pos_t y,
 }
 
 void pw_screen_draw_text_box(screen_pos_t x1, screen_pos_t y1,
-                             screen_pos_t x2, screen_pos_t y2,
+                             screen_pos_t width, screen_pos_t height,
                              screen_colour_t c) {
 
     // assume y2 > y1 and x2 > x1
-    size_t width = x2 - x1 + 1;
-    size_t height = y2 - y1 + 1;
+    screen_pos_t x2 = x1 + width - 1;
+    screen_pos_t y2 = y1 + height - 1;
 
     screen_area_t amoled_area = {0}, pw_area = {0};
 
