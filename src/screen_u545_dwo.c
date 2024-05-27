@@ -246,7 +246,7 @@ void amoled_draw_buffer(int x_start, int y_start, int width, int height,
     amoled_send_cmd(CMD_NOP, 0, params);
 
     // Delay may not be necessary
-    HAL_Delay(10);
+    //HAL_Delay(10);
 }
 
 /**
