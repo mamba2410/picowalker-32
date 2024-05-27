@@ -166,9 +166,11 @@ void picowalker_main() {
     HAL_GPIO_WritePin(ACCEL_CSB_PORT, ACCEL_CSB_PIN, GPIO_PIN_SET);
     HAL_GPIO_WritePin(EEPROM_CSB_PORT, EEPROM_CSB_PIN, GPIO_PIN_SET);
 
+    pw_log_init();
     pw_screen_init();
     pw_eeprom_init();
-    pw_accel_init();
+    //pw_accel_init();
+    pw_ir_init();
 
     pw_img_t img = {
         .width = 64,
@@ -180,15 +182,25 @@ void picowalker_main() {
     //screen_clear_area(0, 0, 100, 100, 0xe03f);
 
     uint8_t buf[16] = {0};
+    uint8_t rxbuf[16] = {0};
 
     int colour = 0x87e1; // works
     int boop = 0;
     while(1) {
-        pw_eeprom_read(0x0000, buf, 8);
-        pw_log(4, "nintendo string: %s\r\n", buf);
+        //pw_eeprom_read(0x0000, buf, 8);
+        //pw_log(4, "nintendo string: %s\r\n", buf);
 
         uint32_t new_steps = pw_accel_get_new_steps();
         pw_log(4, "got new steps %d\r\n", new_steps);
+
+        rxbuf[0] = 0;
+        int recv = pw_ir_read(rxbuf, 16);
+        if(recv > 0) {
+            pw_log(4, "ir read: 0x%02x\r\n", rxbuf[0] ^ 0xaa);
+        }
+
+        buf[0] = 0xfc ^ 0xaa;
+        pw_ir_write(buf, 1);
 
         pw_screen_draw_img(&img, 32, 0);
         img.data = dumps_furret_large_img_bin + boop*768;

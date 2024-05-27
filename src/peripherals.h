@@ -84,9 +84,11 @@
 #define SPEAKER_DAC_HANDLE  hdac1
 #define COMP_HANDLE         hcomp1
 #define SPI_HANDLE          hspi2
-#define IRDA_HANDLE         hirda4
+//#define IRDA_HANDLE         hirda4 // in irda mode
+#define IR_UART_HANDLE      huart4 // in uart mode
 #define I2C_HANDLE          hi2c1
 #define DEBUG_UART_HANDLE   huart1
+#define US_TIMER_HANDLE     htim1 // used for ir stuff
 
 /*
  * =================================
