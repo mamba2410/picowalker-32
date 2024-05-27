@@ -126,7 +126,8 @@ enum {
     BUTTON_R = 0x04,
 };
 
-#define DEBOUNCE_TIME_US    100000   // 100ms
+#define DEBOUNCE_TIME_US    250000   // 50ms
+#define DEBOUNCE_TIME_MS    250 // 250ms
 
 /*
  *  Functions defined by the driver

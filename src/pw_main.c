@@ -171,6 +171,7 @@ void picowalker_main() {
     pw_eeprom_init();
     //pw_accel_init();
     pw_ir_init();
+    pw_button_init();
 
     pw_img_t img = {
         .width = 64,

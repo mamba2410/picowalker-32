@@ -59,6 +59,7 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define USER_BUTTON_Pin GPIO_PIN_13
 #define USER_BUTTON_GPIO_Port GPIOC
+#define USER_BUTTON_EXTI_IRQn EXTI13_IRQn
 #define ACCEL_INT1_Pin GPIO_PIN_1
 #define ACCEL_INT1_GPIO_Port GPIOH
 #define SCREEN_RST_Pin GPIO_PIN_0
@@ -73,12 +74,15 @@ void Error_Handler(void);
 #define EEPROM_CSB_GPIO_Port GPIOA
 #define FLASH_CSB_Pin GPIO_PIN_15
 #define FLASH_CSB_GPIO_Port GPIOA
-#define BUT3_Pin GPIO_PIN_10
-#define BUT3_GPIO_Port GPIOC
-#define BUT2_Pin GPIO_PIN_11
-#define BUT2_GPIO_Port GPIOC
-#define BUT1_Pin GPIO_PIN_12
-#define BUT1_GPIO_Port GPIOC
+#define BUTL_Pin GPIO_PIN_10
+#define BUTL_GPIO_Port GPIOC
+#define BUTL_EXTI_IRQn EXTI10_IRQn
+#define BUTM_Pin GPIO_PIN_11
+#define BUTM_GPIO_Port GPIOC
+#define BUTM_EXTI_IRQn EXTI11_IRQn
+#define BUTR_Pin GPIO_PIN_12
+#define BUTR_GPIO_Port GPIOC
+#define BUTR_EXTI_IRQn EXTI12_IRQn
 #define ACCEL_CSB_Pin GPIO_PIN_5
 #define ACCEL_CSB_GPIO_Port GPIOB
 #define BOOT0_Pin GPIO_PIN_3
