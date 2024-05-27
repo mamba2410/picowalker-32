@@ -158,6 +158,7 @@ void pw_accel_init() {
     // Check if chip is on bus
     accel_read_reg(ACCEL_REG_CHIPID, 1, buf);
     if(buf[0] != ACCEL_CHIPID) {
+        pw_log(0, "Accel chipid is wrong, read %02x, expected %02x\r\n", buf[0], ACCEL_CHIPID);
         Error_Handler();
     }
 
