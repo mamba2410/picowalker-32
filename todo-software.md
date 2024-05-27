@@ -6,14 +6,17 @@
     - Screen drawing is slow when core speed is slow - use DMA
 - Test screen code
 - Test accelerometer code
+    - how to make device register steps? tapping it doesn't work.
 - Test eeprom code
     - Add a `delay_us` function because waiting 1ms between spi actions is wasteful
+    - sometimes it times out and fails to read?
 - Add M95512 eeprom code
 - Add code for flash rom
     - Just a note: both flash memories return data latched on falling edge, but accept data on rising edge
-- Add code for IR
-- Add code for serial debug
+- Test code for IR
+    - Write timeout after rx'ing something. idk wtf this is.
 - Add code for buttons
+    - tweak debounce?
 - Add code for speakers
 - Figure out how to get device to act as usb slave
 - Sleep mode
