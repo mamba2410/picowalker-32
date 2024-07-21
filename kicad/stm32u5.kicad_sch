@@ -895,6 +895,11 @@
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 7ec10b0d-38c6-4b64-8cd5-a803a7ec9e10)
   )
+  (text "Do we need wakeup pin? Will ACCEL_INT or user buttons be enough?"
+    (at 149.86 41.91 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid 82ea687b-4b5f-4e7b-bd5d-88440fe47887)
+  )
   (text "Comparator needs analogue function" (at 163.83 82.55 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 888984b3-f055-4c7b-af6b-faaec55a4a2c)

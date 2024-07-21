@@ -650,6 +650,10 @@
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 492dcdc8-a6e0-40d2-8908-f7c1fb4c19c1)
   )
+  (text "TODO: NEEDS POWER CHECKING" (at 224.79 58.42 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid cbf7a378-44d2-4bb3-8679-31ec57100eee)
+  )
 
   (hierarchical_label "RESET" (shape input) (at 158.75 53.34 180) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify right))

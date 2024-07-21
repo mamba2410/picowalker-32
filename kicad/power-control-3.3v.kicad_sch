@@ -1386,6 +1386,11 @@
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 0cd2fe38-e6ab-46a7-958c-20fbda9366a7)
   )
+  (text "Note: ~{PG} seems to indicate \"charging\" rather than \"battery power ok\""
+    (at 101.6 173.99 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid 0f0eadac-38d4-41f4-8512-91f7135d13af)
+  )
   (text "Is this really needed?\nDepends on cost and board space requirements"
     (at 109.22 68.58 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
@@ -1442,6 +1447,11 @@
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 8f8a19a0-b73c-4281-bfd6-75652e94cfdb)
   )
+  (text "Gives no indication of battery level, only (charging, low, other)\nRethink this to figure out battery level?"
+    (at 88.9 100.33 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid 9231c374-1a76-41dd-aed6-1207d360c11c)
+  )
   (text "(7)" (at 144.78 125.73 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 9a2aaa0f-29c3-43cc-8451-09dcfd2d0981)
@@ -1471,6 +1481,11 @@
   (text "(3)" (at 40.64 163.83 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid d9893208-3273-4bd1-a773-bc20fe2cdcc8)
+  )
+  (text "Note: MCU Uneeds all 3 pins for the full table.\n~{LBO} will also be low during certain charging stages. ~{PG} can differentiate these.\nBAT2 only needed to differentiate between charging states (charge complete/fault)."
+    (at 85.09 184.15 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid dd169423-f849-4ec0-bfba-bfffeb3de972)
   )
   (text "these are a bit weird. see table 5-1\nin datasheet\nor table 2-1 \nhttps://ww1.microchip.com/downloads/en/devicedoc/51812b.pdf"
     (at 101.6 166.37 0)
