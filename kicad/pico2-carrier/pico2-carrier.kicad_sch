@@ -326,7 +326,7 @@
 				)
 			)
 		)
-		(symbol "Connector:Conn_01x07_Pin"
+		(symbol "Connector:Conn_01x08_Pin"
 			(pin_names
 				(offset 1.016) hide)
 			(exclude_from_sim no)
@@ -340,8 +340,8 @@
 					)
 				)
 			)
-			(property "Value" "Conn_01x07_Pin"
-				(at 0 -10.16 0)
+			(property "Value" "Conn_01x08_Pin"
+				(at 0 -12.7 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -366,7 +366,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "Generic connector, single row, 01x07, script generated"
+			(property "Description" "Generic connector, single row, 01x08, script generated"
 				(at 0 0 0)
 				(effects
 					(font
@@ -401,7 +401,19 @@
 					(hide yes)
 				)
 			)
-			(symbol "Conn_01x07_Pin_1_1"
+			(symbol "Conn_01x08_Pin_1_1"
+				(polyline
+					(pts
+						(xy 1.27 -10.16) (xy 0.8636 -10.16)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
 				(polyline
 					(pts
 						(xy 1.27 -7.62) (xy 0.8636 -7.62)
@@ -484,6 +496,17 @@
 					)
 					(fill
 						(type none)
+					)
+				)
+				(rectangle
+					(start 0.8636 -10.033)
+					(end 0 -10.287)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type outline)
 					)
 				)
 				(rectangle
@@ -682,6 +705,24 @@
 						)
 					)
 					(number "7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 5.08 -10.16 180)
+					(length 3.81)
+					(name "Pin_8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "8"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -4201,10 +4242,6 @@
 		(uuid "b7749080-de1d-4944-ba2e-289e5ab34aec")
 	)
 	(no_connect
-		(at 128.27 135.89)
-		(uuid "be08d7be-28ae-4a2b-80f2-73c748f0c356")
-	)
-	(no_connect
 		(at 121.92 110.49)
 		(uuid "cca60137-6a86-4664-b643-1008bd8da59e")
 	)
@@ -4872,13 +4909,13 @@
 	)
 	(wire
 		(pts
-			(xy 102.87 76.2) (xy 116.84 76.2)
+			(xy 119.38 128.27) (xy 135.89 128.27)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "7be8d222-7db5-4d9b-94dc-bd572ec303bc")
+		(uuid "7ac7ad9f-206d-46eb-b6bc-ac87e20b6f7e")
 	)
 	(wire
 		(pts
@@ -4902,7 +4939,7 @@
 	)
 	(wire
 		(pts
-			(xy 119.38 125.73) (xy 138.43 125.73)
+			(xy 119.38 125.73) (xy 148.59 125.73)
 		)
 		(stroke
 			(width 0)
@@ -5009,6 +5046,16 @@
 			(type default)
 		)
 		(uuid "8c6a1269-987a-4e27-a0ef-79bd099bcb09")
+	)
+	(wire
+		(pts
+			(xy 102.87 78.74) (xy 116.84 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8fe5a8a3-5b53-4a49-af67-2b59fac991f6")
 	)
 	(wire
 		(pts
@@ -5172,7 +5219,7 @@
 	)
 	(wire
 		(pts
-			(xy 119.38 135.89) (xy 128.27 135.89)
+			(xy 119.38 135.89) (xy 134.62 135.89)
 		)
 		(stroke
 			(width 0)
@@ -5359,6 +5406,16 @@
 			(type default)
 		)
 		(uuid "be892287-5e3d-4d72-a26a-031a8059af55")
+	)
+	(wire
+		(pts
+			(xy 102.87 76.2) (xy 119.38 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bfc965ed-2d00-40f7-8fcf-10451bb24b12")
 	)
 	(wire
 		(pts
@@ -5875,6 +5932,16 @@
 		)
 		(uuid "1ac13f3d-e8cb-4cc3-8b7d-a90bf4cbba96")
 	)
+	(text "Software reset might be sufficient"
+		(exclude_from_sim no)
+		(at 151.892 135.128 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "6a4d259f-324c-4377-941d-f7194ca3f6e4")
+	)
 	(text "1.7V - 5.5V at normal temperatures"
 		(exclude_from_sim no)
 		(at 158.242 39.624 0)
@@ -5984,6 +6051,17 @@
 		)
 		(uuid "3489dc8f-9cd3-48fe-8d51-dc93fac40bee")
 	)
+	(label "~{SCREEN_RST}"
+		(at 119.38 76.2 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "35bebbf0-80b5-4c3c-bb5f-da294b403916")
+	)
 	(label "BUT_R"
 		(at 127 21.59 0)
 		(fields_autoplaced yes)
@@ -6005,6 +6083,17 @@
 			(justify right bottom)
 		)
 		(uuid "3a2361a9-afd3-4685-bdfa-faf33f5659de")
+	)
+	(label "~{SCREEN_RST}"
+		(at 134.62 135.89 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "3b3cf731-1c8d-4a5f-a104-ea6d08774ab9")
 	)
 	(label "BUT_L"
 		(at 66.04 140.97 0)
@@ -6357,6 +6446,17 @@
 			(justify left bottom)
 		)
 		(uuid "c3f5915c-c7bf-4ff4-ae66-80057f2791b4")
+	)
+	(label "SCREEN_PWR_EN"
+		(at 135.89 128.27 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "c8a3d701-9565-41fd-9b27-55daf69c10a3")
 	)
 	(label "~{SCREEN_CSB}"
 		(at 119.38 60.96 180)
@@ -6797,73 +6897,6 @@
 			(project "pico2-carrier"
 				(path "/4204b4ad-0ae5-4a8a-a079-fb4cf2b0ed9e"
 					(reference "#PWR029")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_name "GND_1")
-		(lib_id "power:GND")
-		(at 116.84 76.2 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "19e4796f-49d6-40dd-9902-74cdaa9464c2")
-		(property "Reference" "#PWR09"
-			(at 116.84 82.55 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 116.84 81.28 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 116.84 76.2 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 116.84 76.2 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 116.84 76.2 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "b490da3c-f126-48ac-9737-cf07f7c6c205")
-		)
-		(instances
-			(project "pico2-carrier"
-				(path "/4204b4ad-0ae5-4a8a-a079-fb4cf2b0ed9e"
-					(reference "#PWR09")
 					(unit 1)
 				)
 			)
@@ -7753,7 +7786,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:Conn_01x07_Pin")
+		(lib_id "Connector:Conn_01x08_Pin")
 		(at 97.79 68.58 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7796,7 +7829,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Generic connector, single row, 01x07, script generated"
+		(property "Description" "Generic connector, single row, 01x08, script generated"
 			(at 97.79 68.58 0)
 			(effects
 				(font
@@ -7825,6 +7858,9 @@
 		)
 		(pin "1"
 			(uuid "e2d6eeec-7963-4c84-bf6b-6c4631a29529")
+		)
+		(pin "8"
+			(uuid "02ce5532-dc01-40bb-a508-4b9580becbd5")
 		)
 		(instances
 			(project ""
@@ -8002,7 +8038,7 @@
 	(symbol
 		(lib_name "GND_1")
 		(lib_id "power:GND")
-		(at 138.43 125.73 0)
+		(at 148.59 125.73 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -8011,7 +8047,7 @@
 		(fields_autoplaced yes)
 		(uuid "620ba0c0-1b4f-417a-aa44-f2934ba39797")
 		(property "Reference" "#PWR027"
-			(at 138.43 132.08 0)
+			(at 148.59 132.08 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8020,7 +8056,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 138.43 130.81 0)
+			(at 148.59 130.81 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8028,7 +8064,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 138.43 125.73 0)
+			(at 148.59 125.73 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8037,7 +8073,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 138.43 125.73 0)
+			(at 148.59 125.73 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8046,7 +8082,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 138.43 125.73 0)
+			(at 148.59 125.73 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8128,6 +8164,73 @@
 			(project "pico2-carrier"
 				(path "/4204b4ad-0ae5-4a8a-a079-fb4cf2b0ed9e"
 					(reference "#PWR020")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_name "GND_1")
+		(lib_id "power:GND")
+		(at 116.84 78.74 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "66c068aa-74a5-4ec2-89c2-52a0edf23c12")
+		(property "Reference" "#PWR09"
+			(at 116.84 85.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 116.84 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 116.84 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 116.84 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 116.84 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "3271b0a8-1435-4928-8519-92745d7be9e7")
+		)
+		(instances
+			(project "pico2-carrier"
+				(path "/4204b4ad-0ae5-4a8a-a079-fb4cf2b0ed9e"
+					(reference "#PWR09")
 					(unit 1)
 				)
 			)
