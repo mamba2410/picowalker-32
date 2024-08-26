@@ -490,6 +490,10 @@
       "screen"
     ],
     [
+      "343217b5-4202-43e4-b721-7c700e10987b",
+      "power-control-i2c"
+    ],
+    [
       "e61e3943-5861-4017-8376-422ffbdd25e4",
       "power-control-3.3v"
     ],

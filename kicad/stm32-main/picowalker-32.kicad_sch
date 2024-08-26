@@ -1361,8 +1361,8 @@
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 2a9669ee-7418-4c00-b0d9-6ceb4cb1e197)
   )
-  (text "Options (least to highest cost):\nW25Q128JV(S|T)\nIS25LP128J(B|F)\nIS25WP128J(B|F)\n\nPackage SOIC8/VSOP8"
-    (at 175.26 119.38 0)
+  (text "Options both pinout compatible, SOIC8 Winbond is cheapest:\nW25Q128JV(S|E)  SOIC8/WSON6x5mm\nIS25LP128J(B|K) SOIC8/WSON6x5mm\n\n"
+    (at 173.99 114.3 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 6d405197-f6ed-419b-8a6a-e5d33aaef720)
   )
@@ -3011,6 +3011,23 @@
         (path "/17fa99ff-0271-4e85-b8d9-a0357d961230"
           (reference "#PWR037") (unit 1)
         )
+      )
+    )
+  )
+
+  (sheet (at 107.95 120.65) (size 30.48 29.21) (fields_autoplaced)
+    (stroke (width 0.1524) (type solid))
+    (fill (color 0 0 0 0.0000))
+    (uuid 343217b5-4202-43e4-b721-7c700e10987b)
+    (property "Sheetname" "power-control-i2c" (at 107.95 119.9384 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheetfile" "power-control-i2c.kicad_sch" (at 107.95 150.4446 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+    (instances
+      (project "picowalker-32"
+        (path "/17fa99ff-0271-4e85-b8d9-a0357d961230" (page "5"))
       )
     )
   )
